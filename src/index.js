@@ -2,9 +2,8 @@
 require('babel-polyfill')
 const crypto = require('crypto')
 const Encryption = require('./encryption')
-const pify = require('pify')
 const converter = require('@iota/converter');
-const { composeAPI, createPrepareTransfers } = require('@iota/core')
+const { composeAPI } = require('@iota/core')
 
 // Setup Provider
 let provider = null;
@@ -126,8 +125,6 @@ const fetch = async (root, mode, sidekey, callback, rounds = 81) => {
     const messages = []
     let consumedAll = false
     let nextRoot = root
-    let transactionCount = 0
-    let messageCount = 0
 
     while (!consumedAll) {
         // Apply channel mode
@@ -138,7 +135,7 @@ const fetch = async (root, mode, sidekey, callback, rounds = 81) => {
 
         // Fetching
         const { findTransactions } = composeAPI({ provider })
-        const hashes = await pify(findTransactions) ({
+        const hashes = await findTransactions({
             addresses: [address]
         })
 
@@ -182,7 +179,7 @@ const fetchSingle = async (root, mode, sidekey, rounds = 81) => {
         address = hash(root, rounds)
     }
     const { findTransactions } = composeAPI({ provider })
-    const hashes = await pify(findTransactions) ({
+    const hashes = await findTransactions({
         addresses: [address]
     })
 
@@ -233,7 +230,7 @@ const txHashesToMessages = async hashes => {
         }
     }
     const { getTransactionObjects } = composeAPI({ provider })
-    const objs = await pify(getTransactionObjects) (
+    const objs = await getTransactionObjects(
         hashes
     )
     return objs
@@ -250,20 +247,11 @@ const attach = async (trytes, root, depth = 6, mwm = 14) => {
         }
     ]
     try {
-        const { sendTrytes } = composeAPI({ provider })
-        const prepareTransfers = createPrepareTransfers()
+        const { prepareTransfers, sendTrytes } = composeAPI({ provider })
 
-        prepareTransfers('9'.repeat(81), transfers, {})
-          .then(async trytes => {
-            await sendTrytes(trytes, depth, mwm)
-                .then(transactions => transactions)
-                .catch(error => {
-                  throw `sendTrytes failed: ${error}`
-                })
-          })
-          .catch(error => {
-            throw `failed to attach message: ${error}`
-          });
+        const trytes = await prepareTransfers('9'.repeat(81), transfers, {})
+
+        return sendTrytes(trytes, depth, mwm);
     } catch (e) {
        	throw `failed to attach message: ${e}`
     }
@@ -278,11 +266,6 @@ const hash = (data, rounds) => {
         ).slice()
     )
 }
-
-const isClient =
-    typeof window !== 'undefined' &&
-    window.document &&
-    window.document.createElement
 
 const keyGen = length => {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9'

@@ -17,8 +17,7 @@
         "@iota/core": "^1.0.0-beta.5",
         "@iota/curl": "^1.0.0-beta.5",
         "babel-polyfill": "^6.26.0",
-        "browserify": "^16.1.1",
-        "pify": "^3.0.0"
+        "browserify": "^16.1.1"
     },
     "devDependencies": {
         "babel-cli": "6.26.0",
