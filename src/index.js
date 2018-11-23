@@ -227,7 +227,7 @@ const txHashesToMessages = async hashes => {
             let l = bundles[bundle]
             delete bundles[bundle]
             return l
-                .sort((a, b) => b[0] < a[0])
+                .sort((a, b) => a[0] - b[0])
                 .reduce((acc, n) => acc + n[1], '')
         }
     }
