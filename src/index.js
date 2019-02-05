@@ -2,8 +2,10 @@
 require('idempotent-babel-polyfill')
 const crypto = require('crypto')
 const Encryption = require('./encryption')
-const converter = require('@iota/converter');
+const converter = require('@iota/converter')
 const { composeAPI } = require('@iota/core')
+const { createHttpClient } = require('@iota/http-client')
+const { createContext, Reader, Mode } = require('../lib/mam')
 
 // Setup Provider
 let provider = null;
@@ -64,7 +66,7 @@ const changeMode = (state, mode, sidekey) => {
         )
     }
     if (sidekey) {
-      state.channel.side_key = sidekey
+      state.channel.side_key = sidekey.padEnd(81, '9')
     }
     state.channel.mode = mode
     return state
@@ -117,62 +119,40 @@ const create = (state, message) => {
 const getRoot = state => Mam.getMamRoot(state.seed, state.channel)
 
 const decode = (payload, side_key, root) => {
-    const mam = Mam.decodeMessage(payload, side_key, root)
+    const mam = Mam.decodeMessage(payload, side_key.padEnd(81, '9'), root)
     return mam
 }
 
-const fetch = async (root, mode, sidekey, callback, rounds = 81) => {
+const fetch = async (root, mode = Mode.Old, sidekey, callback) => {
+    let client = createHttpClient({ provider })
+    let ctx = await createContext()
     const messages = []
-    let consumedAll = false
+    let hasMessage = false
     let nextRoot = root
-    let transactionCount = 0
-    let messageCount = 0
 
-    while (!consumedAll) {
-        // Apply channel mode
-        let address = nextRoot
-        if (mode === 'private' || mode === 'restricted') {
-            address = hash(nextRoot, rounds)
-        }
+    try {
+        do {
+            let reader = new Reader(ctx, client, Mode.Old, nextRoot, sidekey)
+            const message = await reader.next()
+            hasMessage = message && message.value && message.value[0]
+            if (hasMessage) {
+                nextRoot = message.value[0].message.nextRoot
+                const payload = message.value[0].message.payload
 
-        // Fetching
-        const { findTransactions } = composeAPI({ provider })
-        const hashes = await findTransactions({
-            addresses: [address]
-        })
-
-        if (hashes.length == 0) {
-            consumedAll = true
-            break
-        }
-
-        transactionCount += hashes.length
-        messageCount++
-
-        const messagesGen = await txHashesToMessages(hashes)
-        for (let message of messagesGen) {
-            try {
-                // Unmask the message
-                const { payload, next_root } = decode(message, sidekey, nextRoot)
                 // Push payload into the messages array
-                if (!callback) {
-                    messages.push(payload)
-                } else {
+                messages.push(payload)
+
+                // Call callback function if provided
+                if (callback) {
                     callback(payload)
                 }
-                nextRoot = next_root
-            } catch (e) {
-                return console.error('failed to parse: ', e)
             }
-        }
+        } while(!!hasMessage)
+        return { messages, nextRoot }
+    } catch (e) {
+        return console.error('failed to parse: ', e)
+        return e
     }
-
-    const resp = {}
-    resp.nextRoot = nextRoot
-    if (!callback) {
-      resp.messages = messages
-    }
-    return resp
 }
 
 const fetchSingle = async (root, mode, sidekey, rounds = 81) => {
