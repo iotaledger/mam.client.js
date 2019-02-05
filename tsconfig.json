@@ -1,0 +1,13 @@
+{
+  "include": ["wasm/**/*.ts"],
+  "compilerOptions": {
+    "lib": ["es2015", "dom", "esnext.asynciterable"],
+    "rootDir": "wasm",
+    "noImplicitThis": true,
+    "strict": true,
+    "outDir": "out",
+    "declaration": true,
+    "declarationDir": "typings",
+    "sourceMap": true
+  }
+}

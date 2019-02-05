@@ -1,32 +1,49 @@
 {
-    "name": "mam.client.js",
-    "private": false,
-    "version": "0.0.5",
-    "main": "lib/mam.client.js",
-    "scripts": {
-        "node": "webpack --progress --colors --watch --env node",
-        "web": "browserify -r ./src/node.js:mam.web.js > ./lib/mam.web.js",
-        "build": "webpack",
-        "compress": "uglifyjs lib/mam.client.js -c -m -o lib/mam.client.min.js & uglifyjs lib/mam.web.js -c -m -o lib/mam.web.min.js"
-    },
-    "engines": {
-        "node": ">=6"
-    },
-    "dependencies": {
-        "@iota/converter": "^1.0.0-beta.5",
-        "@iota/core": "^1.0.0-beta.5",
-        "@iota/curl": "^1.0.0-beta.5",
-        "babel-polyfill": "^6.26.0",
-        "browserify": "^16.1.1"
-    },
-    "devDependencies": {
-        "babel-cli": "6.26.0",
-        "babel-core": "6.26.0",
-        "babel-eslint": "8.0.1",
-        "babel-loader": "7.1.2",
-        "babel-plugin-add-module-exports": "0.2.1",
-        "babel-preset-env": "1.6.1",
-        "uglify-js": "mishoo/UglifyJS2#harmony",
-        "webpack": "3.7.1"
-    }
+  "name": "mam.client.js",
+  "private": false,
+  "version": "0.1.0",
+  "main": "lib/mam.cliemt.js",
+  "scripts": {
+    "web": "webpack --progress --colors --mode production --env web",
+    "node": "webpack --progress --colors --mode production --env node",
+    "build": "yarn build-mam && yarn build-wasm",
+    "build-mam": "webpack --progress --colors --mode development --env node",
+    "build-wasm": "webpack --config webpack.wasm.config.js --progress --colors --mode development --env node",
+    "test": "yarn run build-wasm && ava-ts"
+  },
+  "ava": {
+    "files": [
+      "tests/**/*.ts"
+    ],
+    "verbose": true
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "@iota/converter": "^1.0.0-beta.8",
+    "@iota/core": "^1.0.0-beta.8",
+    "@iota/curl": "^1.0.0-beta.8",
+    "@iota/http-client": "^1.0.0-beta.8",
+    "declaration-bundler-webpack-plugin": "th0br0/declaration-bundler-webpack-plugin"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@types/webassembly-js-api": "^0.0.2",
+    "arraybuffer-loader": "^1.0.7",
+    "ava": "^0.25.0",
+    "ava-ts": "^0.25.2",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "8.0.4",
+    "babel-plugin-add-module-exports": "1.0.0",
+    "fast-text-encoding": "^1.0.0",
+    "idempotent-babel-polyfill": "^7.0.0",
+    "ts-loader": "^5.3.1",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.1",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "yargs": "^12.0.2"
+  }
 }

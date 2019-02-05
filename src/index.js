@@ -1,5 +1,5 @@
 /// Deps
-require('babel-polyfill')
+require('idempotent-babel-polyfill')
 const crypto = require('crypto')
 const Encryption = require('./encryption')
 const converter = require('@iota/converter');

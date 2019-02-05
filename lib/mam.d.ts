@@ -97,13 +97,15 @@
 	    constructor(payload: string, nextRoot: string);
 	}
 	export type MaybeMessage = DecodedMessage | Error;
-	export function decodeMessage(ctx: NativeContext, root: string, payload: string, sideKey: string | undefined, mode: Mode): MaybeMessage;
+	export function decodeMessage(ctx: NativeContext, root: string, payload: string, sideKey?: string, mode?: Mode): MaybeMessage;
 
+	import 'fast-text-encoding';
 	import { NativeContext } from './bindings';
 	export function assertHash(s: string): void;
 	export function stringToCTrits(ctx: NativeContext, str: string): any;
 	export function ctritsToString(ctx: NativeContext, ct: any): string;
 
+	import 'idempotent-babel-polyfill';
 	export * from './bindings';
 	export * from './helpers';
 	export * from './wrapper';
