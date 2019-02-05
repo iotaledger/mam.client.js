@@ -29,9 +29,6 @@ const publish = async packet => {
     return message.root
 }
 
-// Callback used to pass data out of the fetch
-const logData = data => console.log('Fetched and parsed', JSON.parse(trytesToAscii(data)), '\n')
-
 const publishAll = async () => {
   const root = await publish({
     message: 'Message from Alice',
@@ -50,6 +47,9 @@ const publishAll = async () => {
 
   return root
 }
+
+// Callback used to pass data out of the fetch
+const logData = data => console.log('Fetched and parsed', JSON.parse(trytesToAscii(data)), '\n')
 
 publishAll()
   .then(async root => {
