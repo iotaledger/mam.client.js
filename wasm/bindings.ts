@@ -145,10 +145,6 @@ export enum Mode {
 export function getIDForMode(mode: Mode, root: string, sideKey: string = '9'.repeat(81)) {
     H.assertHash(root);
 
-    if (mode !== Mode.Old) {
-        H.assertHash(sideKey);
-    }
-
     if (mode == Mode.Public) {
         return root;
     }
@@ -169,7 +165,7 @@ export function getIDForMode(mode: Mode, root: string, sideKey: string = '9'.rep
 
     let c = new Curl();
     let rootT = trits(root);
-    let keyT = trits(sideKey);
+    let keyT = trits(H.padKey(sideKey));
     let out = new Int8Array(243);
 
     if (mode != Mode.Old) {
@@ -201,10 +197,8 @@ export class Channel {
             return Error.TreeDepleted;
         }
 
-        H.assertHash(sideKey);
-
         let messageT = H.stringToCTrits(this._ctx, message);
-        let sideKeyT = H.stringToCTrits(this._ctx, sideKey)
+        let sideKeyT = H.stringToCTrits(this._ctx, H.padKey(sideKey))
         let currentRootT = H.stringToCTrits(this._ctx, this._currentTree.root());
         let nextRootT = H.stringToCTrits(this._ctx, this._nextTree.root());
 
@@ -233,7 +227,7 @@ export class Channel {
 
         return new EncodedMessage(
             maskedPayload,
-            sideKey,
+            H.padKey(sideKey),
             this._currentTree,
             this._nextTree
         );
@@ -250,16 +244,13 @@ export class DecodedMessage {
 
 export type MaybeMessage = DecodedMessage | Error;
 
-export function decodeMessage(ctx: NativeContext, root: string, payload: string, sideKey: string = "9".repeat(81), mode: Mode = Mode.Public): MaybeMessage {
+export function decodeMessage(ctx: NativeContext, root: string, payload: string, sideKey: string = "9".repeat(81)): MaybeMessage {
 
     H.assertHash(root);
-    if (!mode || (mode && mode !== Mode.Old)) {
-        H.assertHash(sideKey);
-    }
 
     let rootT = H.stringToCTrits(ctx, root);
     let payloadT = H.stringToCTrits(ctx, payload);
-    let sideKeyT = H.stringToCTrits(ctx, sideKey);
+    let sideKeyT = H.stringToCTrits(ctx, H.padKey(sideKey));
 
     let result;
 

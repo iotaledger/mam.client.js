@@ -19,11 +19,7 @@ function makeResult(w: ReadCandidate[]): IteratorResult<ReadCandidate[]> {
 export class Reader implements AsyncIterator<ReadCandidate[]>{
 
     constructor(private _ctx: NativeContext, private _provider: Provider, private _mode: Mode, private _root: string, private _sideKey: string = '9'.repeat(81)) {
-
         H.assertHash(_root);
-        if (_mode !== Mode.Old) {
-            H.assertHash(_sideKey);
-        }
     }
 
     listenAddress(): string {
@@ -39,13 +35,13 @@ export class Reader implements AsyncIterator<ReadCandidate[]>{
         // Bypass TypeScript oddities, see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11027
         return createFindTransactionObjects(this._provider)({ addresses: [this.listenAddress()] }).then(txs => {
 
-            if (txs.length == 0) {
+            if (txs.length === 0) {
                 return makeResult([]);
             }
 
-            let bundles: Map<string, Array<Transaction>> = new Map<string, Array<Transaction>>();
+            const bundles: Map<string, Array<Transaction>> = new Map<string, Array<Transaction>>();
             txs.forEach(tx => {
-                let v = bundles.get(tx.bundle);
+                const v = bundles.get(tx.bundle);
                 if (!v) {
                     bundles.set(tx.bundle, [tx]);
                 } else {
@@ -53,7 +49,7 @@ export class Reader implements AsyncIterator<ReadCandidate[]>{
                 }
             });
 
-            let messages: { hash: string, msg: string }[] = [];
+            const messages: { hash: string, msg: string }[] = [];
 
             bundles.forEach((txs, bundle) => {
                 let length = txs[0].lastIndex + 1;
@@ -78,7 +74,7 @@ export class Reader implements AsyncIterator<ReadCandidate[]>{
                 }
             });
 
-            let decoded = messages.map(m => new ReadCandidate(m.hash, decodeMessage(this._ctx, this._root, m.msg, this._sideKey, this._mode)));
+            let decoded = messages.map(m => new ReadCandidate(m.hash, decodeMessage(this._ctx, this._root, m.msg, this._sideKey)));
 
 
             return makeResult(decoded);

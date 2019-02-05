@@ -6,8 +6,7 @@
   "scripts": {
     "web": "webpack --progress --colors --mode production --env web",
     "node": "webpack --progress --colors --mode production --env node",
-    "build": "yarn build-mam && yarn build-wasm",
-    "build-mam": "webpack --progress --colors --mode development --env node",
+    "build": "webpack --progress --colors --mode development --env node",
     "build-wasm": "webpack --config webpack.wasm.config.js --progress --colors --mode development --env node",
     "test": "yarn run build-wasm && ava-ts"
   },
@@ -25,23 +24,24 @@
     "@iota/core": "^1.0.0-beta.8",
     "@iota/curl": "^1.0.0-beta.8",
     "@iota/http-client": "^1.0.0-beta.8",
-    "declaration-bundler-webpack-plugin": "th0br0/declaration-bundler-webpack-plugin"
+    "ava": "^0.25.0",
+    "declaration-bundler-webpack-plugin": "th0br0/declaration-bundler-webpack-plugin",
+    "idempotent-babel-polyfill": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
     "@types/webassembly-js-api": "^0.0.2",
     "arraybuffer-loader": "^1.0.7",
-    "ava": "^0.25.0",
     "ava-ts": "^0.25.2",
     "babel-eslint": "^10.0.1",
     "babel-loader": "8.0.4",
     "babel-plugin-add-module-exports": "1.0.0",
     "fast-text-encoding": "^1.0.0",
-    "idempotent-babel-polyfill": "^7.0.0",
     "ts-loader": "^5.3.1",
     "ts-node": "^7.0.1",
-    "typescript": "^3.2.1",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.1",
     "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2",
     "yargs": "^12.0.2"

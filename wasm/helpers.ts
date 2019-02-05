@@ -53,3 +53,7 @@ export function ctritsToString(ctx: NativeContext, ct: any): string {
 
     return out;
 }
+
+export function padKey(key: any): string {
+    return key.padEnd(81, '9');
+}
