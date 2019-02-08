@@ -66,7 +66,7 @@ const changeMode = (state, mode, sidekey) => {
         )
     }
     if (sidekey) {
-      state.channel.side_key = sidekey.padEnd(81, '9')
+      state.channel.side_key = typeof sidekey === 'string' ? sidekey.padEnd(81, '9') : sidekey
     }
     state.channel.mode = mode
     return state
@@ -119,19 +119,21 @@ const create = (state, message) => {
 const getRoot = state => Mam.getMamRoot(state.seed, state.channel)
 
 const decode = (payload, sidekey, root) => {
-    Mam.decodeMessage(payload, sidekey.padEnd(81, '9'), root)
+    const key = typeof sidekey === 'string' ? sidekey.padEnd(81, '9') : sidekey
+    Mam.decodeMessage(payload, key, root)
 }
 
-const fetch = async (root, mode = Mode.Old, sidekey, callback) => {
+const fetch = async (root, selectedMode, sidekey, callback) => {
     let client = createHttpClient({ provider })
     let ctx = await createContext()
     const messages = []
+    const mode = selectedMode === 'public' ? Mode.Public : Mode.Old
     let hasMessage = false
     let nextRoot = root
 
     try {
         do {
-            let reader = new Reader(ctx, client, Mode.Old, nextRoot, sidekey)
+            let reader = new Reader(ctx, client, mode, nextRoot, sidekey)
             const message = await reader.next()
             hasMessage = message && message.value && message.value[0]
             if (hasMessage) {

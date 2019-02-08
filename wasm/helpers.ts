@@ -55,5 +55,5 @@ export function ctritsToString(ctx: NativeContext, ct: any): string {
 }
 
 export function padKey(key: any): string {
-    return key.padEnd(81, '9');
+    return typeof key === 'object' ? key : key.padEnd(81, '9');
 }
