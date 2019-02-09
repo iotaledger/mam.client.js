@@ -165,7 +165,7 @@ const fetchSingle = async (root, mode, sidekey, rounds = 81) => {
     if (mode === 'private' || mode === 'restricted') {
         address = hash(root, rounds)
     }
-    const { findTransactions } = composeAPI({ provider, attachToTangle })
+    const { findTransactions } = composeAPI({ provider })
     const hashes = await findTransactions({
         addresses: [address]
     })
@@ -216,7 +216,7 @@ const txHashesToMessages = async hashes => {
                 .reduce((acc, n) => acc + n[1], '')
         }
     }
-    const { getTransactionObjects } = composeAPI({ provider, attachToTangle })
+    const { getTransactionObjects } = composeAPI({ provider })
     const objs = await getTransactionObjects(
         hashes
     )
