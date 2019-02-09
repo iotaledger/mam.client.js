@@ -9,6 +9,7 @@ const { createContext, Reader, Mode } = require('../lib/mam')
 
 // Setup Provider
 let provider = null;
+let attachToTangle = null;
 let Mam = {}
 
 /**
@@ -17,9 +18,12 @@ let Mam = {}
  * @param  {string} seed
  * @param  {integer} security
  */
-const init = (externalProvider, seed = keyGen(81), security = 2) => {
+const init = (externalProvider, externalAttachToTangle, seed = keyGen(81), security = 2) => {
     // Set IOTA provider
     provider = externalProvider
+
+    // Set alternative attachToTangle function
+    attachToTangle = externalAttachToTangle
 
     // Setup Personal Channel
     const channel = {
@@ -124,7 +128,7 @@ const decode = (payload, sidekey, root) => {
 }
 
 const fetch = async (root, selectedMode, sidekey, callback) => {
-    let client = createHttpClient({ provider })
+    let client = createHttpClient({ provider, attachToTangle })
     let ctx = await createContext()
     const messages = []
     const mode = selectedMode === 'public' ? Mode.Public : Mode.Old
@@ -161,7 +165,7 @@ const fetchSingle = async (root, mode, sidekey, rounds = 81) => {
     if (mode === 'private' || mode === 'restricted') {
         address = hash(root, rounds)
     }
-    const { findTransactions } = composeAPI({ provider })
+    const { findTransactions } = composeAPI({ provider, attachToTangle })
     const hashes = await findTransactions({
         addresses: [address]
     })
@@ -212,7 +216,7 @@ const txHashesToMessages = async hashes => {
                 .reduce((acc, n) => acc + n[1], '')
         }
     }
-    const { getTransactionObjects } = composeAPI({ provider })
+    const { getTransactionObjects } = composeAPI({ provider, attachToTangle })
     const objs = await getTransactionObjects(
         hashes
     )
@@ -230,7 +234,7 @@ const attach = async (trytes, root, depth = 3, mwm = 9) => {
         }
     ]
     try {
-        const { prepareTransfers, sendTrytes } = composeAPI({ provider })
+        const { prepareTransfers, sendTrytes } = composeAPI({ provider, attachToTangle })
 
         const trytes = await prepareTransfers('9'.repeat(81), transfers, {})
 
