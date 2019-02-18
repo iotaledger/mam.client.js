@@ -1,6 +1,6 @@
 # DISCLAIMER - before usage
 
-This library is experimental and not yet fully supported by IOTA Foundation, you might find some bugs, sometimes the IRI nodes are not working properly with it.
+This library is experimental, you might find some bugs, sometimes the IRI nodes are not working properly with it.
 
 
 [A future version](https://github.com/iotaledger/entangled/tree/develop/mam/v2)
