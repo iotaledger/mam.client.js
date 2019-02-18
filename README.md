@@ -1,3 +1,9 @@
+# DISACLAIMER - before usage
+
+This library is expremental and not yet fully supported by IOTA Foundation, you might find some bugs sometimes the IRI nodes are not working properly with it.
+
+Only the V2+ of this library will be fully supported, stay tuned for the release.
+
 # MAM Client JS Library
 
 It is possible to publish transactions to the Tangle that contain only messages, with no value. This introduces many possibilities for data integrity and communication, but comes with the caveat that message-only signatures are not checked. What we introduce is a method of symmetric-key encrypted, signed data that takes advantage of merkle-tree winternitz signatures for extended public key usability, that can be found trivially by those who know to look for it.
