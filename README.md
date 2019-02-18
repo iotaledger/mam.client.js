@@ -1,6 +1,6 @@
 # DISACLAIMER - before usage
 
-This library is expremental and not yet fully supported by IOTA Foundation, you might find some bugs sometimes the IRI nodes are not working properly with it.
+This library is exprimental and not yet fully supported by IOTA Foundation, you might find some bugs sometimes the IRI nodes are not working properly with it.
 
 Only the V2+ of this library will be fully supported, stay tuned for the release.
 
