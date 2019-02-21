@@ -9,7 +9,7 @@ const { createContext, Reader, Mode } = require('../lib/mam')
 
 // Setup Provider
 let provider = null;
-let attachToTangle = null;
+let overrideAttachToTangle = null;
 let Mam = {}
 
 /**
@@ -17,13 +17,14 @@ let Mam = {}
  * @param  {object} externalIOTA
  * @param  {string} seed
  * @param  {integer} security
+ * @param  {function} externalAttachToTangle
  */
-const init = (externalProvider, externalAttachToTangle, seed = keyGen(81), security = 2) => {
+const init = (externalProvider, seed = keyGen(81), security = 2, externalAttachToTangle) => {
     // Set IOTA provider
     provider = externalProvider
 
     // Set alternative attachToTangle function
-    attachToTangle = externalAttachToTangle
+    overrideAttachToTangle = externalAttachToTangle
 
     // Setup Personal Channel
     const channel = {
@@ -128,7 +129,7 @@ const decode = (payload, sidekey, root) => {
 }
 
 const fetch = async (root, selectedMode, sidekey, callback) => {
-    let client = createHttpClient({ provider, attachToTangle })
+    let client = createHttpClient({ provider, attachToTangle : overrideAttachToTangle })
     let ctx = await createContext()
     const messages = []
     const mode = selectedMode === 'public' ? Mode.Public : Mode.Old
@@ -234,7 +235,7 @@ const attach = async (trytes, root, depth = 3, mwm = 9) => {
         }
     ]
     try {
-        const { prepareTransfers, sendTrytes } = composeAPI({ provider, attachToTangle })
+        const { prepareTransfers, sendTrytes } = composeAPI({ provider, attachToTangle : overrideAttachToTangle })
 
         const trytes = await prepareTransfers('9'.repeat(81), transfers, {})
 
