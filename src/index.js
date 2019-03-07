@@ -79,15 +79,13 @@ const subscribe = (state, channelRoot, channelKey = null) => {
  */
 const changeMode = (state, mode, sidekey = null) => {
     if (mode !== 'public' && mode !== 'private' && mode !== 'restricted') {
-        return console.log('Did not recognise mode!')
+        throw new Error('The mode parameter should be public, private or restricted')
     }
     if (mode === 'restricted' && !sidekey) {
-        return console.log(
-            'You must specify a side key for a restricted channel'
-        )
+        throw new Error('You must specify a side key for restricted mode');
     }
     if (sidekey) {
-      state.channel.side_key = typeof sidekey === 'string' ? sidekey.padEnd(81, '9') : sidekey
+        state.channel.side_key = typeof sidekey === 'string' ? sidekey.padEnd(81, '9') : sidekey
     }
     state.channel.mode = mode
     return state
@@ -193,7 +191,6 @@ const fetch = async (root, selectedMode, sidekey, callback, limit) => {
         } while (!!hasMessage && messages.length < localLimit)
         return { messages, nextRoot }
     } catch (e) {
-        console.error('failed to parse: ', e)
         return e
     }
 }
@@ -252,7 +249,7 @@ const attach = async (trytes, root, depth = 3, mwm = 9, tag = '') => {
 
         return sendTrytes(trytes, depth, mwm)
     } catch (e) {
-       	throw `failed to attach message: ${e}`
+        throw `failed to attach message: ${e}`
     }
 }
 
