@@ -4,10 +4,17 @@
     "description": "Masked Authentication Messaging wrapper for Javascript (Browser and Node)",
     "main": "lib/mam.client.js",
     "typings": "lib/mam.client.d.ts",
+    "browser": {
+        "lib/mam.client.js": "lib/mam.web.js"
+    },
     "scripts": {
-        "web": "browserify -r ./src/node.js:mam.web.js -s Mam > ./web/mam.web.js",
-        "build": "webpack",
-        "compress": "uglifyjs lib/mam.client.js -c -m -o lib/mam.client.min.js"
+        "clean": "rimraf ./lib/mam.client.js ./lib/mam.client.min.js ./lib/mam.web.js ./lib/mam.web.min.js",
+        "lint": "eslint ./src",
+        "build-node-dev": "webpack --target node --mode development",
+        "build-node-prod": "webpack --target node --mode production",
+        "build-web-dev": "webpack --target web --mode development",
+        "build-web-prod": "webpack --target web --mode production",
+        "dist": "run-s clean lint build-node-dev build-node-prod build-web-dev build-web-prod"
     },
     "repository": {
         "type": "git",
@@ -30,19 +37,17 @@
     "dependencies": {
         "@iota/converter": "^1.0.0-beta.11",
         "@iota/core": "^1.0.0-beta.11",
-        "@iota/curl": "^1.0.0-beta.11",
-        "babel-polyfill": "^6.26.0"
+        "@iota/curl": "^1.0.0-beta.11"
     },
     "devDependencies": {
-        "babel-cli": "6.26.0",
-        "babel-core": "6.26.3",
-        "babel-eslint": "8.0.1",
-        "babel-loader": "7.1.2",
-        "babel-plugin-add-module-exports": "0.2.1",
-        "babel-preset-env": "1.6.1",
-        "browserify": "^16.2.3",
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "babel-loader": "^8.0.5",
         "encoding": "^0.1.12",
-        "uglify-js": "mishoo/UglifyJS2#harmony",
-        "webpack": "3.7.1"
+        "eslint": "^5.15.1",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^2.6.3",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.2.3"
     }
 }
