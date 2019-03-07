@@ -1,0 +1,66 @@
+<html>
+
+<head>
+  <title>MAM Example Publish and Fetch</title>
+</head>
+
+<body>
+  <div id="output"></div>
+  <script src="../lib/mam.web.js"></script>
+  <script>
+    (async function() {
+      const mode = 'public'
+      const provider = 'https://nodes.devnet.iota.org'
+
+      const mamExplorerLink = `https://mam-explorer.firebaseapp.com/?provider=${encodeURIComponent(provider)}&mode=${mode}&root=`
+
+      const outputHtml = document.querySelector("#output");
+
+      // Initialise MAM State
+      let mamState = Mam.init(provider)
+
+      // Publish to tangle
+      const publish = async trytes => {
+        // Create MAM Payload - STRING OF TRYTES
+        const message = Mam.create(mamState, trytes)
+
+        // Save new mamState
+        mamState = message.state
+
+        // Attach the payload
+        await Mam.attach(message.payload, message.address, 3, 9)
+
+        outputHtml.innerHTML += `Published: ${trytes}<br/>`;
+        return message.root
+      }
+
+      const publishAll = async () => {
+        const root = await publish('ALICE')
+
+        await publish('BOB')
+
+        await publish('CHARLIE')
+
+        return root
+      }
+
+      // Callback used to pass data out of the fetch
+      const logData = data => outputHtml.innerHTML += `Fetched ${data}<br/>`;
+
+      const root = await publishAll();
+
+      // Output asyncronously using "logData" callback function
+      await Mam.fetch(root, mode, null, logData)
+
+      // Output syncronously once fetch is completed
+      const result = await Mam.fetch(root, mode)
+      result.messages.forEach(message => {
+        outputHtml.innerHTML += `Fetched ${message}<br/>`
+      });
+
+      outputHtml.innerHTML += `Verify with MAM Explorer:<br/><a target="_blank" href="${mamExplorerLink}${root}">${mamExplorerLink}${root}</a>`;
+    }) ();
+  </script>
+</body>
+
+</html>
