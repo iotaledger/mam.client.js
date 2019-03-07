@@ -296,3 +296,11 @@ yarn build-web-dev
 // Build a production/minified version lib/mam.web.min.js
 yarn build-web-prod
 ```
+
+### Build All 
+
+To build all the libraries just run:
+
+```shell
+yarn dist
+```
