@@ -5,7 +5,7 @@ const mode = 'restricted'
 const secretKey = 'VERYSECRETKEY'
 const provider = 'https://nodes.devnet.iota.org'
 
-const mamExplorerLink = `https://mam-explorer.firebaseapp.com/?provider=${provider}&mode=${mode}&key=${secretKey.padEnd(81, '9')}&root=`
+const mamExplorerLink = `https://mam-explorer.firebaseapp.com/?provider=${encodeURIComponent(provider)}&mode=${mode}&key=${secretKey.padEnd(81, '9')}&root=`
 
 // Initialise MAM State
 let mamState = Mam.init(provider)

@@ -4,7 +4,7 @@ const { asciiToTrytes, trytesToAscii } = require('@iota/converter')
 const mode = 'public'
 const provider = 'https://nodes.devnet.iota.org'
 
-const mamExplorerLink = `https://mam-explorer.firebaseapp.com/?provider=${provider}&mode=${mode}&root=`
+const mamExplorerLink = `https://mam-explorer.firebaseapp.com/?provider=${encodeURIComponent(provider)}&mode=${mode}&root=`
 
 // Initialise MAM State
 let mamState = Mam.init(provider)
