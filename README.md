@@ -2,6 +2,8 @@
 
 > This is a work in progress. The library is usable, however it is still evolving and may have some breaking changes in the future. These will most likely be minor, in addition to extending functionality.
 
+In the future this library will be a wrapper around the new implementation of MAM [https://github.com/iotaledger/entangled/tree/develop/mam](https://github.com/iotaledger/entangled/tree/develop/mam)
+
 # MAM Client JS Library
 
 It is possible to publish transactions to the Tangle that contain only messages, with no value. This introduces many possibilities for data integrity and communication, but comes with the caveat that message-only signatures are not checked. What we introduce is a method of symmetric-key encrypted, signed data that takes advantage of merkle-tree winternitz signatures for extended public key usability, that can be found trivially by those who know to look for it.
@@ -24,19 +26,32 @@ After adding the package `mam.client.js` it will provide access to the functions
 
 ```javascript
 const Mam = require('mam.client.js');
+Mam.init(...);
 
 or
 
 import * as Mam from 'mam.client.js';
+Mam.init(...);
+```
+
+or in the browser using
+
+```html
+<script src="./lib/mam.web.js"></script>
+<script>
+    Mam.init(...)
+</script>
 ```
 
 For a simple user experience you are advised to call the `init()` function to enable to tracking of state in your channels. When calling `init()` you should pass in the `provider` which is the address of an IRI node. This will provide access to some extra functionality including attaching, fetching and subscribing.
 
-```javascript
-Mam.init('https://nodes.devnet.iota.org');
-```
+## Examples
 
-> *Full working [example](../master/example/publishAndFetchPublic.js)*
+* [Publishing in Public mode](../master/example/publishAndFetchPublic.js)
+* [Publishing in Public mode with Custom Tag](../master/example/publishAndFetchPublicCustomTag.js)
+* [Publishing in Restricted mode](../master/example/publishAndFetchRestricted.js)
+
+* [Publishing in Public mode from Browser](../master/example/publishAndFetchPublic.html)
 
 ## API
 
@@ -257,26 +272,27 @@ This repo provides wrappers for both Browser and Node environments. The build sc
 
 ### CommonJS Module for NodeJS/Browser with Module Loader
 
-The below command will build a file called `mam.client.js` in the `lib/` directory.
+The below commands will build a file called `mam.client.js` in the `lib/` directory. You can then include the pacakge in your code using `require/import`.
 
 ```shell
 // Install dependencies
 yarn
-// Build
-yarn build
+// Build a development version lib/mam.client.js
+yarn build-node-dev
+
+// Build a production/minified version lib/mam.client.min.js
+yarn build-node-prod
 ```
 
 ### Browser Script Include
 
-The below command will build a file called `mam.web.js` in the `web/` directory. You can use it by including it directly in a web page.
-
-```html
-<script src="./mam.web.js"></script>
-```
+The below commands will build a file called `mam.web.js` in the `lib/` directory. You can then include the package in your code using `<script src="">`
 
 ```shell
 // Install dependencies
 yarn
-// Build
-yarn web
+// Build a development version lib/mam.web.js
+yarn build-web-dev
+// Build a production/minified version lib/mam.web.min.js
+yarn build-web-prod
 ```
