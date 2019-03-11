@@ -9,7 +9,7 @@ module.exports = (env, options) => ({
     },
     mode: options.mode,
     target: options.target,
-    devtool: options.mode === 'development' ? 'inline-source-map' : 'none',
+    devtool: 'none',
     module: {
         rules: [
             {
