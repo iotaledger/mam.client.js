@@ -4,9 +4,6 @@
     "description": "Masked Authentication Messaging wrapper for Javascript (Browser and Node)",
     "main": "lib/mam.client.js",
     "typings": "lib/mam.client.d.ts",
-    "browser": {
-        "lib/mam.client.js": "lib/mam.web.js"
-    },
     "scripts": {
         "clean": "rimraf ./lib/mam.client.js ./lib/mam.client.min.js ./lib/mam.web.js ./lib/mam.web.min.js",
         "lint": "eslint ./src",
