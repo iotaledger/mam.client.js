@@ -1,7 +1,7 @@
 /**
- * mam.client.js definition file.
+ * @iota/mam definition file.
  */
-declare module "mam.client.js" {
+declare module "@iota/mam" {
     import { Transaction, AttachToTangle } from "@iota/core";
 
     /**
