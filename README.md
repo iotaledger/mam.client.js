@@ -22,15 +22,15 @@ or
 yarn add @iota/mam
 ```
 
-After adding the package `mam.client.js` it will provide access to the functions described below. To import the module simple use one of the following methods, depending on which version of JavaScript you are using.
+After adding the package it will provide access to the functions described below. To import the module simple use one of the following methods, depending on which version of JavaScript you are using.
 
 ```javascript
-const Mam = require('mam.client.js');
+const Mam = require('@iota/mam');
 Mam.init(...);
 
 or
 
-import * as Mam from 'mam.client.js';
+import * as Mam from '@iota/mam';
 Mam.init(...);
 ```
 
