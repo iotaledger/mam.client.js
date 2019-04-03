@@ -1,6 +1,6 @@
 {
-    "name": "mam.client.js",
-    "version": "0.7.2",
+    "name": "@iota/mam",
+    "version": "0.7.1",
     "description": "Masked Authentication Messaging wrapper for Javascript (Browser and Node)",
     "main": "lib/mam.client.js",
     "typings": "lib/mam.client.d.ts",
@@ -11,7 +11,7 @@
         "build-node-prod": "webpack --target node --mode production",
         "build-web-dev": "webpack --target web --mode development",
         "build-web-prod": "webpack --target web --mode production",
-        "dist": "run-s clean lint build-node-dev build-node-prod build-web-dev build-web-prod"
+        "dist": "run-s clean lint build-node-dev build-node-prod build-web-prod"
     },
     "repository": {
         "type": "git",

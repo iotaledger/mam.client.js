@@ -15,22 +15,22 @@ This is wrapper library for the WASM/ASM.js output of the [IOTA Bindings reposit
 Add the package to your project with:
 
 ```shell
-npm install mam.client.js
+npm install @iota/mam
 
 or
 
-yarn add mam.client.js
+yarn add @iota/mam
 ```
 
 After adding the package it will provide access to the functions described below. To import the module simple use one of the following methods, depending on which version of JavaScript you are using.
 
 ```javascript
-const Mam = require('mam.client.js');
+const Mam = require('@iota/mam');
 Mam.init(...);
 
 or
 
-import * as Mam from 'mam.client.js';
+import * as Mam from '@iota/mam';
 Mam.init(...);
 ```
 
@@ -297,7 +297,7 @@ yarn build-web-dev
 yarn build-web-prod
 ```
 
-### Build All
+### Build All 
 
 To build all the libraries just run:
 
