@@ -72,7 +72,7 @@ const subscribe = (state, channelRoot, channelKey = null) => {
 
 /**
  * Change the mode for the mam state
- * @param {object} state 
+ * @param {object} state
  * @param {string} mode [public/private/restricted]
  * @param {string} sidekey, required for restricted mode
  * @returns {object} Updated state object to be used with future actions.
@@ -150,7 +150,7 @@ const getRoot = state => Mam.getMamRoot(state.seed, state.channel)
  */
 const decode = (payload, sidekey, root) => {
     const key = typeof sidekey === 'string' ? sidekey.padEnd(81, '9') : sidekey
-    Mam.decodeMessage(payload, key, root)
+    return Mam.decodeMessage(payload, key, root)
 }
 
 /**
