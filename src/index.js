@@ -65,7 +65,8 @@ const subscribe = (state, channelRoot, channelKey = null) => {
         timeout: 5000,
         root: channelRoot,
         next_root: null,
-        active: true
+        active: true,
+        mode: state.channel.mode
     }
     return state
 }
@@ -213,13 +214,12 @@ const fetchSingle = async (root, selectedMode, sidekey) => {
 /**
  * Listen to a channel for new messages.
  * @param {Object} channel The channel object to listen to.
- * @param {string} mode [public/private/restricted]
  * @param {Function} callback Callback called when new messages arrive.
  */
-const listen = (channel, mode, callback) => {
+const listen = (channel, callback) => {
     let root = channel.root
     return setTimeout(async () => {
-        let resp = await fetch(root, mode, channel.channelKey)
+        let resp = await fetch(root, channel.mode, channel.channelKey)
         root = resp.nextRoot
         callback(resp.messages)
     }, channel.timeout)
