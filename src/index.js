@@ -219,7 +219,7 @@ const fetchSingle = async (root, selectedMode, sidekey) => {
 const listen = (channel, callback) => {
     let root = channel.root
     return setTimeout(async () => {
-        let resp = await fetch(root, channel.mode, channel.sideKey)
+        let resp = await fetch(root, channel.mode, channel.channelKey)
         root = resp.nextRoot
         callback(resp.messages)
     }, channel.timeout)
