@@ -5,7 +5,7 @@ declare module "@iota/mam" {
     import { Transaction, AttachToTangle } from "@iota/core";
 
     /**
-     * The mode for the mam stream.
+     * The mode for the mam channel.
      */
     export type MamMode = "public" | "private" | "restricted";
 
@@ -27,6 +27,7 @@ declare module "@iota/mam" {
      * A mam subscribed channel.
      */
     export interface MamSubscribedChannel {
+        mode: string;
         channelKey: string;
         timeout: number;
         root: string;
@@ -93,10 +94,11 @@ declare module "@iota/mam" {
      * Add a subscription to your state object
      * @param state The mam state.
      * @param channelRoot The channel root.
+     * @param channelMode The channel mode, defaults to public.
      * @param channelKey The optional channel key.
      * @returns Updated state object to be used with future actions.
      */
-    function subscribe(state: MamState, channelRoot: string, channelKey?: string): MamState;
+    function subscribe(state: MamState, channelRoot: string, channelMode?: MamMode, channelKey?: string): MamState;
 
     /**
      * Change the mode of the channel.
@@ -108,7 +110,7 @@ declare module "@iota/mam" {
     function changeMode(state: MamState, mode: MamMode, sidekey?: string): MamState;
 
     /**
-     * Create a message to use on the mam stream.
+     * Create a message to use on the mam channel.
      * @param state The mam state.
      * @param message The Tryte encoded message.
      * @returns An object containing the payload and updated state.
