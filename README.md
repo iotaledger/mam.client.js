@@ -57,7 +57,7 @@ For a simple user experience you are advised to call the `init()` function to en
 
 ### `init`
 
-This initialises the state. This will return a state object that tracks the progress of your stream and streams you are following
+This initialises the state. This will return a state object that tracks the progress of your channel and channels you are following
 
 #### Input
 
@@ -80,7 +80,7 @@ Mam.init(settings, seed, security)
 
 ### `changeMode`
 
-This takes the state object and changes the default stream mode from `public` to the specified mode and `sidekey`. There are only three possible modes: `public`, `private`, & `restricted`. If you fail to pass one of these modes it will default to `public`. This will return a state object that tracks the progress of your stream and streams you are following
+This takes the state object and changes the default channel mode from `public` to the specified mode and `sidekey`. There are only three possible modes: `public`, `private`, & `restricted`. If you fail to pass one of these modes it will default to `public`. This will return a state object that tracks the progress of your channel and channels you are following
 
 #### Input
 
@@ -172,7 +172,8 @@ Mam.subscribe(state, channelRoot, channelKey)
 
 1. **state**: `Object` Initialised IOTA library with a provider set.
 2. **channelRoot**: `String` The root of the channel to subscribe to.
-3. **channelKey**: `String` Optional, The key of the channel to subscribe to.
+3. **channelMode**: `String` Optional, can one of `public`, `private` or `restricted` *Null value falls back to public*
+4. **channelKey**: `String` Optional, The key of the channel to subscribe to.
 
 #### Return
 
@@ -223,7 +224,7 @@ await Mam.attach(payload, address, depth, minWeightMagnitude, tag)
 
 ### `fetch` - async
 
-Fetches the stream sequentially from a known `root` and optional `sidekey`. This call can be used in two ways: **Without a callback** will cause the function to read the entire stream before returning. **With a callback** the application will return data through the callback and finally the `nextroot` when finished.
+Fetches the channel sequentially from a known `root` and optional `sidekey`. This call can be used in two ways: **Without a callback** will cause the function to read the entire channel before returning. **With a callback** the application will return data through the callback and finally the `nextroot` when finished.
 
 #### Input
 
@@ -231,8 +232,8 @@ Fetches the stream sequentially from a known `root` and optional `sidekey`. This
 await Mam.fetch(root, mode, sidekey, callback, limit)
 ```
 
-1. **root**: `String` Tryte-encoded string used as the entry point to a stream. *NOT the address!*
-2. **mode**: `String` Stream mode. Can one of `public`, `private` or `restricted` *Null value falls back to public*
+1. **root**: `String` Tryte-encoded string used as the entry point to a channel. *NOT the address!*
+2. **mode**: `String` Channel mode. Can one of `public`, `private` or `restricted` *Null value falls back to public*
 3. **sideKey**: `String` Tryte-encoded encryption key. *Null value falls back to default key*
 4. **callback**: `Function` Optional callback. *Null value will cause the function to push payload into the messages array.*
 5. **limit**: `Number` Optional limits the number of items returned, defaults to all.
@@ -240,7 +241,7 @@ await Mam.fetch(root, mode, sidekey, callback, limit)
 #### Return
 
 1. **nextRoot**: `String` Tryte-encoded string pointing to the next root.
-2. **messages**: `Array` Array of Tryte-encoded messages from the stream.
+2. **messages**: `Array` Array of Tryte-encoded messages from the channel.
 
 ------
 
@@ -254,14 +255,14 @@ Fetches a single message from a known `root` and optional `sidekey`.
 await Mam.fetchSingle(root, mode, sidekey)
 ```
 
-1. **root**: `String` Tryte-encoded string used as the entry point to a stream. *NOT the address!*
-2. **mode**: `String` Stream mode. Can one of `public`, `private` or `restricted` *Null value falls back to public*
+1. **root**: `String` Tryte-encoded string used as the entry point to a channel. *NOT the address!*
+2. **mode**: `String` Channel mode. Can one of `public`, `private` or `restricted` *Null value falls back to public*
 3. **sideKey**: `String` Tryte-encoded encryption key. *Null value falls back to default key*
 
 #### Return
 
 1. **nextRoot**: `String` Tryte-encoded string pointing to the next root.
-2. **payload**: `String` Tryte-encoded messages from the stream.
+2. **payload**: `String` Tryte-encoded messages from the channel.
 
 ## Building the library
 
@@ -297,7 +298,7 @@ yarn build-web-dev
 yarn build-web-prod
 ```
 
-### Build All 
+### Build All
 
 To build all the libraries just run:
 

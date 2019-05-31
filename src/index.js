@@ -56,12 +56,14 @@ const init = (settings, seed = keyGen(81), security = 2) => {
  * Add a subscription to your state object
  * @param {object} state The state object to add the subscription to.
  * @param {string} channelRoot The root of the channel to subscribe to.
+ * @param {string} channelMode Can be `public`, `private` or `restricted`.
  * @param {string} channelKey Optional, the key of the channel to subscribe to.
  * @returns {object} Updated state object to be used with future actions.
  */
-const subscribe = (state, channelRoot, channelKey = null) => {
+const subscribe = (state, channelRoot, channelMode = "public", channelKey = null) => {
     state.subscribed[channelRoot] = {
         channelKey,
+        mode: channelMode,
         timeout: 5000,
         root: channelRoot,
         next_root: null,
@@ -154,8 +156,8 @@ const decode = (payload, sidekey, root) => {
 }
 
 /**
- * Fetches the stream sequentially from a known `root` and optional `sidekey`
- * @param {string} root Tryte-encoded string used as the entry point to a stream.
+ * Fetches the channel sequentially from a known `root` and optional `sidekey`
+ * @param {string} root Tryte-encoded string used as the entry point to a channel.
  * @param {string} selectedMode Can one of `public`, `private` or `restricted`
  * @param {string} sidekey Tryte-encoded encryption key for restricted mode
  * @param {function} callback Optional callback for each payload retrieved
@@ -197,7 +199,7 @@ const fetch = async (root, selectedMode, sidekey, callback, limit) => {
 
 /**
  * Fetches a single message from a known `root` and optional `sidekey`
- * @param {string} root Tryte-encoded string used as the entry point to a stream.
+ * @param {string} root Tryte-encoded string used as the entry point to a channel.
  * @param {string} selectedMode Can one of `public`, `private` or `restricted`
  * @param {string} sidekey Tryte-encoded encryption key for restricted mode
  * @returns {object} The payload and the next root.
@@ -218,7 +220,7 @@ const fetchSingle = async (root, selectedMode, sidekey) => {
 const listen = (channel, callback) => {
     let root = channel.root
     return setTimeout(async () => {
-        let resp = await fetch(root)
+        let resp = await fetch(root, channel.mode, channel.channelKey)
         root = resp.nextRoot
         callback(resp.messages)
     }, channel.timeout)
