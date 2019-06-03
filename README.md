@@ -167,7 +167,7 @@ This method will add a subscription to your state object using the provided chan
 #### Input
 
 ```javascript
-Mam.subscribe(state, channelRoot, channelKey)
+Mam.subscribe(state, channelRoot, channelMode, channelKey)
 ```
 
 1. **state**: `Object` Initialised IOTA library with a provider set.
