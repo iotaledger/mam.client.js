@@ -1,0 +1,418 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "MAM API",
+        "version": "1.0.0",
+        "description": "API to wrap MAM client in REST calls. This API is effectively a wrapper around the [https://github.com/iotaledger/mam.client.js](https://github.com/iotaledger/mam.client.js) library."
+    },
+    "tags": [
+        {
+            "name": "Version",
+            "description": "Version information about the API"
+        }
+    ],
+    "servers": [
+        {
+            "url": "https://mam-api.dag.sh"
+        }
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Get the API details",
+                "operationId": "getVersion",
+                "tags": [
+                    "Version"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "name",
+                                        "version"
+                                    ],
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "The name of the API"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "description": "The current version of the API"
+                                        }
+                                    },
+                                    "example": {
+                                        "name": "mam-api",
+                                        "version": "1.0.0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/docs": {
+            "get": {
+                "summary": "Get the document for the API",
+                "operationId": "getDocs",
+                "tags": [
+                    "Version"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "<b>example</b>"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v0/publish": {
+            "post": {
+                "summary": "REST call to perform a MAM.publish",
+                "operationId": "publish",
+                "tags": [
+                    "v0"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "provider",
+                                    "mode",
+                                    "seed",
+                                    "dataType",
+                                    "data"
+                                ],
+                                "properties": {
+                                    "provider": {
+                                        "type": "string",
+                                        "description": "This can either be either of the constants mainnet, devnet or the url of a node e.g. https://nodes.thetangle.org:443",
+                                        "example": "devnet"
+                                    },
+                                    "depth": {
+                                        "type": "number",
+                                        "description": "This depth at which to attach the MAM transaction to the tangle, this is only used when the provider is a url",
+                                        "example": 3
+                                    },
+                                    "mwm": {
+                                        "type": "number",
+                                        "description": "The mwm with which to attach the MAM transaction to the tangle, this is only used when the provider is a url",
+                                        "example": 9
+                                    },
+                                    "mode": {
+                                        "type": "string",
+                                        "enum": [
+                                            "public",
+                                            "private",
+                                            "restricted"
+                                        ],
+                                        "description": "The mode for the MAM channel either public, private or restricted",
+                                        "example": "restricted"
+                                    },
+                                    "key": {
+                                        "type": "string",
+                                        "description": "This key is required when the mode is restricted, it should be trytes",
+                                        "example": "ABCDEFG9ABCDEFG"
+                                    },
+                                    "seed": {
+                                        "type": "string",
+                                        "description": "This seed which is used to generate the channel, it should be trytes and 81 characters in length",
+                                        "example": "MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAMAPI9MAAA"
+                                    },
+                                    "index": {
+                                        "type": "number",
+                                        "description": "The index to publish the message in the channel, defaults to 0 if not provided",
+                                        "example": 3
+                                    },
+                                    "dataType": {
+                                        "type": "string",
+                                        "enum": [
+                                            "trytes",
+                                            "text",
+                                            "json"
+                                        ],
+                                        "description": "The type of the data in the data field either trytes, text or json",
+                                        "example": "json"
+                                    },
+                                    "data": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string"
+                                            },
+                                            {
+                                                "type": "object"
+                                            }
+                                        ],
+                                        "description": "The type of the data in the data field either trytes, text or json",
+                                        "example": {
+                                            "a": "hello",
+                                            "b": 2
+                                        }
+                                    },
+                                    "tag": {
+                                        "type": "string",
+                                        "description": "This tag which is set on the MAM message, it should be trytes <= 27 characters in length",
+                                        "example": "MAM9MAM9MAM"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "success",
+                                        "message",
+                                        "publishedRoot",
+                                        "nextIndex"
+                                    ],
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "True if the operation was a success, false if it failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A message explaining the result of the operation"
+                                        },
+                                        "publishedRoot": {
+                                            "type": "string",
+                                            "description": "The root where the message was published"
+                                        },
+                                        "nextIndex": {
+                                            "type": "number",
+                                            "description": "The next index to publish a message"
+                                        }
+                                    },
+                                    "example": {
+                                        "example": {
+                                            "success": true,
+                                            "message": "OK",
+                                            "publishedRoot": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM",
+                                            "nextIndex": 1
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failure",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "success",
+                                        "message"
+                                    ],
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "True if the operation was a success, false if it failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A message explaining the result of the operation"
+                                        }
+                                    },
+                                    "example": {
+                                        "example": {
+                                            "success": false,
+                                            "message": "The seed parameter was missing"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/v0/fetch": {
+            "get": {
+                "summary": "REST call to perform a MAM.fetchSingle",
+                "operationId": "fetch",
+                "tags": [
+                    "v0"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "provider",
+                        "description": "This can either be either of the constants mainnet, devnet or the url of a node e.g. https://nodes.thetangle.org:443",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "devnet"
+                    },
+                    {
+                        "in": "query",
+                        "name": "mode",
+                        "description": "The mode for the MAM channel either public, private or restricted",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "restricted"
+                    },
+                    {
+                        "in": "query",
+                        "name": "key",
+                        "description": "This key is required when the mode is restricted, it should be trytes",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "ABCDEFG9ABCDEFG"
+                    },
+                    {
+                        "in": "query",
+                        "name": "root",
+                        "description": "The root is where we should read the MAM message from",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+                    },
+                    {
+                        "in": "query",
+                        "name": "dataType",
+                        "description": "The type of the data in the data field either trytes, text or json",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "trytes"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "success",
+                                        "message",
+                                        "data",
+                                        "nextRoot"
+                                    ],
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "True if the operation was a success, false if it failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A message explaining the result of the operation"
+                                        },
+                                        "data": {
+                                            "type": "string",
+                                            "description": "The data that was found at the requested root"
+                                        },
+                                        "nextRoot": {
+                                            "type": "string",
+                                            "description": "The next root in the channel"
+                                        }
+                                    },
+                                    "example": {
+                                        "example": {
+                                            "success": true,
+                                            "message": "OK",
+                                            "data": "HELLO",
+                                            "nextRoot": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "There was no data found on the requested root",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "success",
+                                        "message"
+                                    ],
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "True if the operation was a success, false if it failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A message explaining the result of the operation"
+                                        }
+                                    },
+                                    "example": {
+                                        "example": {
+                                            "success": false,
+                                            "message": "No data found on root"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failure",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "success",
+                                        "message"
+                                    ],
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "description": "True if the operation was a success, false if it failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "description": "A message explaining the result of the operation"
+                                        }
+                                    },
+                                    "example": {
+                                        "example": {
+                                            "success": false,
+                                            "message": "The seed parameter was missing"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

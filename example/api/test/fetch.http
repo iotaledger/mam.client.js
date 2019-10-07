@@ -1,0 +1,37 @@
+### DevNet Public
+GET http://localhost:4000/v0/fetch HTTP/1.1
+content-type: application/json
+
+{
+    "provider": "devnet",
+    "mode": "public",
+    "root": "KXSIPDRKCYB9TI9MQTVWWPUOCYAUCLDTBRACY9NZOZNRVAUVUCTYQZVDCHGFOAVYDEYGZHJAPP9KEBAWW",
+    "dataType": "trytes"
+}
+
+### MainNet Private
+GET http://localhost:4000/v0/fetch HTTP/1.1
+content-type: application/json
+
+{
+    "provider": "mainnet",
+    "mode": "private",
+    "root": "HTJO9ARSBOFPRSEIIHEYETEFMUYDZP9ORWFWCG9WKQLVMCYHCKTJ9ZDVYOIZOJAQGYOPOTNGLMPYSKKFL",
+    "dataType": "text"
+}
+
+
+### Provider Restricted
+GET http://localhost:4000/v0/fetch HTTP/1.1
+content-type: application/json
+
+{
+    "provider": "https://nodes.iota.cafe:443",
+    "depth": 3,
+    "mwm": 14,
+    "mode": "restricted",
+    "key": "ABCDEFG",
+    "root": "UHQOYUNCGYRLKZQVVBLJYBSLWTCJK9XYLBH9NOLMW9XSOJZVCPJIGGNNFECCSHNVBNTXQUZMFBQHKCDOI",
+    "dataType": "json"
+}
+

@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "lib": [
+        "dom",
+        "es2015",
+        "es2015.iterable"
+      ],
+      "esModuleInterop": true,
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "noUnusedLocals": true,
+      "typeRoots": [
+        "node_modules/@types",
+        "types"
+      ],
+      "outDir": "dist",
+      "resolveJsonModule": true,
+      "inlineSourceMap": true
+    },
+    "include": [
+      "src"
+    ]
+  }
+  

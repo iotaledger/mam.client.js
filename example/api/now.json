@@ -1,0 +1,13 @@
+{
+    "version": 1,
+    "name": "mam-api",
+    "features": {
+      "cloud": "v1"
+    },
+    "scale": {
+      "sfo": {
+        "min": 1,
+        "max": 1
+      }
+    }
+}

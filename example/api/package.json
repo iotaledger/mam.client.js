@@ -1,0 +1,52 @@
+{
+    "name": "mam-api",
+    "description": "API for MAM v0",
+    "version": "1.0.0",
+    "authors": [
+        "Martyn Janes <martyn.janes@iota.org>"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iotaledger/mam.client.js.git/tree/master/api"
+    },
+    "private": true,
+    "scripts": {
+        "build-clean": "rimraf ./dist/*",
+        "build-compile": "tsc",
+        "build-watch": "tsc --watch",
+        "build-lint": "tslint -p ./tsconfig.json -c ./tslint.json -t verbose",
+        "build-copy-config": "copyfiles -u 2 ./src/data/config*.json ./dist/data/",
+        "build-copy-docs": "copyfiles -u 1 ./src/docs/**/* ./dist",
+        "build": "npm-run-all build-clean build-compile build-lint build-copy-docs build-copy-config",
+        "serve-mon": "nodemon ./dist/index",
+        "start-dev": "run-p serve-mon build-watch",
+        "start": "node ./dist/index",
+        "docs-api": "api2html -o src/docs/index.html -l http,shell,javascript--nodejs spec/api.json -b -c spec/logo.png -u https://www.iota.org -i ../../../../spec/example,../../../../spec/changelog"
+    },
+    "engines": {
+        "node": "10.x.x"
+    },
+    "dependencies": {
+        "@iota/client-load-balancer": "github:iotaledger/client-load-balancer",
+        "@iota/core": "^1.0.0-beta.21",
+        "@iota/mam": "^0.7.3",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.5",
+        "@types/express": "^4.17.0",
+        "@types/node": "^12.7.11",
+        "api2html": "^0.3.5",
+        "copyfiles": "^2.1.0",
+        "nodemon": "^1.19.3",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.0",
+        "ts-jest": "^24.1.0",
+        "tslint": "^5.18.0",
+        "tslint-eslint-rules": "^5.4.0",
+        "tslint-microsoft-contrib": "^6.2.0",
+        "typescript": "^3.5.2"
+    }
+}
