@@ -4,6 +4,8 @@
 
 In the future this library will be a wrapper around the new implementation of MAM [https://github.com/iotaledger/entangled/tree/develop/mam](https://github.com/iotaledger/entangled/tree/develop/mam)
 
+**There is now a pure JavaScript implementation of MAMv0 which is compatible with this library [https://github.com/iotaledger/mam.js](https://github.com/iotaledger/mam.js)**
+
 # MAM Client JS Library
 
 It is possible to publish transactions to the Tangle that contain only messages, with no value. This introduces many possibilities for data integrity and communication, but comes with the caveat that message-only signatures are not checked. What we introduce is a method of symmetric-key encrypted, signed data that takes advantage of merkle-tree winternitz signatures for extended public key usability, that can be found trivially by those who know to look for it.
